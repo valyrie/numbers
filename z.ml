@@ -25,3 +25,8 @@ let of_int i =
         Negative (N.of_int i)
     else
         Zero
+let neg z =
+    match z with
+        Zero -> Zero
+        | Positive n -> Negative n
+        | Negative n -> Positive n
