@@ -48,6 +48,8 @@ let rec add x y =
     match (x, y) with
         _, Zero -> x
         | Zero, _ -> y
+        | Positive n, Positive m -> Positive (N.add n m)
+        | Negative n, Negative m -> Negative (N.add n m)
         | _, Positive _ -> add (succ x) (pred y)
         | _, Negative _ -> add (pred x) (succ y)
 let sub x y =
