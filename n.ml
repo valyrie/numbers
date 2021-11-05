@@ -27,11 +27,15 @@ let to_int n =
         | [i] -> i
         | _ -> raise (Invalid_argument "natural is too large to be converted to an int")
 let rec compare x y =
-    match (is_zero x, is_zero y) with
-        true, true -> 0
-        | true, false -> -1
-        | false, true -> 1
-        | false, false -> compare (pred x) (pred y)
+    match x, y with
+        [0], _ -> -1
+        | _, [0] -> 1
+        | [n], [m] -> Int.compare n m 
+        | _, _ -> match (is_zero x, is_zero y) with
+            true, true -> 0
+            | true, false -> -1
+            | false, true -> 1
+            | false, false -> compare (pred x) (pred y)
 let rec add x y =
     match x, y with
         _, [0] -> x
