@@ -33,12 +33,12 @@ let rec compare x y =
         | false, true -> 1
         | false, false -> compare (pred x) (pred y)
 let rec add x y =
-    if is_zero y then
-        x
-    else
-        add (succ x) (pred y)
+    match x, y with
+        _, [0] -> x
+        | n :: ntl, m :: mtl when Int.max_int - m > n -> add (n + m :: ntl) (0 :: mtl)
+        | _, _ -> add (succ x) (pred y)
 let rec sub x y =
-    if is_zero y then
-        x
-    else
-        sub (pred x) (pred y)
+    match x, y with
+        _, [0] -> x
+        | n :: ntl, m :: mtl when m < n -> sub (n - m :: ntl) (0 :: mtl)
+        | _, _ -> sub (pred x) (pred y)
