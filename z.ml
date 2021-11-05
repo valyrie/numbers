@@ -30,3 +30,12 @@ let neg z =
         Zero -> Zero
         | Positive n -> Negative n
         | Negative n -> Positive n
+let rec compare x y =
+    match x, y with
+        Zero, Zero -> 0
+        | Negative _, Zero
+        | Zero, Positive _ -> -1
+        | Positive _, Zero
+        | Zero, Negative _ -> 1
+        | Positive _, _ -> compare (pred x) (pred y)
+        | Negative _, _ -> compare (succ x) (succ y)
