@@ -39,3 +39,11 @@ let rec compare x y =
         | Zero, Negative _ -> 1
         | Positive _, _ -> compare (pred x) (pred y)
         | Negative _, _ -> compare (succ x) (succ y)
+let rec add x y =
+    match (x, y) with
+        _, Zero -> x
+        | Zero, _ -> y
+        | _, Positive _ -> add (succ x) (pred y)
+        | _, Negative _ -> add (pred x) (succ y)
+let sub x y =
+    add x @@ neg y
