@@ -1,5 +1,7 @@
 (* natural numbers: 0, 1, 2, 3, n *)
 type t = int list
+let of_int i: t =
+    [i]
 let rec is_zero (x: t) =
     match x with
         [] -> true
