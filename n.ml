@@ -35,10 +35,10 @@ let rec compare x y =
 let rec add x y =
     match x, y with
         _, [0] -> x
-        | n :: ntl, m :: mtl when Int.max_int - m > n -> add (n + m :: ntl) (0 :: mtl)
+        | n :: ntl, m :: mtl when Int.max_int - m >= n -> add (n + m :: ntl) (0 :: mtl)
         | _, _ -> add (succ x) (pred y)
 let rec sub x y =
     match x, y with
         _, [0] -> x
-        | n :: ntl, m :: mtl when m < n -> sub (n - m :: ntl) (0 :: mtl)
+        | n :: ntl, m :: mtl when m <= n -> sub (n - m :: ntl) (0 :: mtl)
         | _, _ -> sub (pred x) (pred y)
