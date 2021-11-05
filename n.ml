@@ -21,3 +21,19 @@ let rec pred (x: t): t =
     | n :: m -> n - 1 :: m
 let of_int i: t =
     [i]
+let rec compare x y =
+    match (is_zero x, is_zero y) with
+        true, true -> 0
+        | true, false -> -1
+        | false, true -> 1
+        | false, false -> compare (pred x) (pred y)
+let rec add x y =
+    if is_zero y then
+        x
+    else
+        add (succ x) (pred y)
+let rec sub x y =
+    if is_zero y then
+        x
+    else
+        sub (pred x) (pred y)
