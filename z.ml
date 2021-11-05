@@ -25,6 +25,11 @@ let of_int i =
         Negative (N.of_int i)
     else
         Zero
+let to_int z =
+    match z with
+        Zero -> 0
+        | Positive n -> N.to_int n
+        | Negative n -> -(N.to_int n)
 let neg z =
     match z with
         Zero -> Zero

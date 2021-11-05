@@ -21,6 +21,11 @@ let rec pred (x: t): t =
     | n :: m -> n - 1 :: m
 let of_int i: t =
     [i]
+let to_int n =
+    match n with
+        [] -> 0
+        | [i] -> i
+        | _ -> raise (Invalid_argument "natural is too large to be converted to an int")
 let rec compare x y =
     match (is_zero x, is_zero y) with
         true, true -> 0
