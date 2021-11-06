@@ -58,6 +58,8 @@ let add a b =
 let compare a b =
     fold_left2
         (fun c a b -> if Int.compare a b = 0 then c else Int.compare a b) 0 0 a b
+let is_zero n =
+    compare n zero = 0
 let sub a b =
     if compare a b > 0 then
         let l = max (length a) (length b) in
