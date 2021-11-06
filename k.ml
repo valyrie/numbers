@@ -1,7 +1,7 @@
 (* counting numbers: 1, 2, 3, n *)
 
 type t = N.t
-let one = N.trim @@ N.of_u32 1l
+let one = N.of_u32 1l
 let trim k =
     N.trim k
 let to_string k =
