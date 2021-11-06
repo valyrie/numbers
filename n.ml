@@ -68,7 +68,7 @@ let sub a b =
     else if compare a b = 0 then
         zero
     else
-        raise @@ Invalid_argument (Printf.sprintf "Cannot subtract N %s N %s" (to_string b) (to_string a))
+        raise @@ Invalid_argument (Printf.sprintf "Cannot subtract N %s from N %s" (to_string b) (to_string a))
 let mul a b =
     let l = (length a) + (length b) in
     let (c, _, _) = fold_left2
