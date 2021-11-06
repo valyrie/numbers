@@ -83,8 +83,6 @@ let mul a b =
             c, i + 1, u8carry cn)
         (make l 0, 0, 0) l a b in
     c
-let is_couting n =
-    compare n zero > 0
 let cat a b =
     Bytes.cat a b
 let trunc a i =
