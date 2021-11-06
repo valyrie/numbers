@@ -9,7 +9,7 @@ let to_list n =
     List.map Char.code @@ List.of_seq @@ Bytes.to_seq n
 let fold_left f i n =
     List.fold_left f i @@ to_list n
-let fold_right f i n =
+let fold_right f n i =
     List.fold_right f (to_list n) i
 let make_zero i = make i 0
 let zero = make_zero 1
@@ -41,7 +41,7 @@ let fold_left2 f i l a b =
     List.fold_left2 f i
         (to_list a)
         (to_list b)
-let fold_right2 f a b i l=
+let fold_right2 f l a b i =
     let (a, b) = pad2 l a b in
     List.fold_right2 f
         (to_list a)
@@ -89,11 +89,11 @@ let trunc a i =
     Bytes.sub (pad i a) 0 i
 let addu32 n i =
     let b = make_zero 4 in
-    let _ = Bytes.set_int32_ne b 0 i in
+    let _ = Bytes.set_int32_ne (trim b) 0 i in
     add n b
 let addu64 n i =
     let b = make_zero 8 in
-    let _ = Bytes.set_int64_ne b 0 i in
+    let _ = Bytes.set_int64_ne (trim b) 0 i in
     add n b
 let of_u32 i =
     addu32 zero i
