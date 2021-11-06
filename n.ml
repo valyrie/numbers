@@ -30,16 +30,19 @@ let get n i =
         Bytes.get n i
     else
         Char.chr 0
-let pad_to l a b =
+let pad l n =
+    let l = max l @@ length n in
+    Bytes.init l (get n)
+let pad2 l a b =
     let l = max l @@ max (length a) (length b) in
     Bytes.init l (get a), Bytes.init l (get b)
 let fold_left2 f i l a b =
-    let (a, b) = pad_to l a b in
+    let (a, b) = pad2 l a b in
     List.fold_left2 f i
         (to_list a)
         (to_list b)
 let fold_right2 f a b i l=
-    let (a, b) = pad_to l a b in
+    let (a, b) = pad2 l a b in
     List.fold_right2 f
         (to_list a)
         (to_list b) i
@@ -82,6 +85,8 @@ let is_couting n =
     compare n zero > 0
 let cat a b =
     Bytes.cat a b
+let trunc a i =
+    Bytes.sub (pad i a) 0 i
 let addu32 n i =
     let b = make_zero 4 in
     let _ = Bytes.set_int32_ne b 0 i in
