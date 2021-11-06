@@ -1,4 +1,4 @@
-(* natural numbers: 0, 1, 2, 3, n *)
+(* naturals: 0, 1, 2, 3, n *)
 
 type t = bytes
 let make i n =
@@ -13,8 +13,6 @@ let fold_right f i n =
     List.fold_right f (to_list n) i
 let make_zero i = make i 0
 let zero = make_zero 1
-let is_zero n =
-    fold_left (fun zero byte -> zero && byte = 0) true n
 let length n =
     Bytes.length n
 let ctz_digits n =
