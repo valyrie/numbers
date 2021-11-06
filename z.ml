@@ -1,33 +1,30 @@
 (* integers: -n, -3, -2, -1, 0, 1, 2, 3, n *)
 
 type t =
-    Zero
-    | Positive of K.t
+    Positive of N.t
     | Negative of K.t
-let zero = Zero
+let zero = Positive N.zero
 let is_zero z =
     match z with
-        Zero -> true
+        Positive n when compare n N.zero = 0 -> true
         | _ -> false
 let trim z =
     match z with
-        Zero -> Zero
-        | Positive k -> Positive (K.trim k)
+        Positive n -> Positive (N.trim n)
         | Negative k -> Negative (K.trim k)
 let to_string z =
     match z with
-        Zero -> "0"
-        | Positive k -> Printf.sprintf " %s" @@ K.to_string k
+        Positive n -> Printf.sprintf " %s" @@ N.to_string n
         | Negative k -> Printf.sprintf "-%s" @@ K.to_string k
 let neg z =
     match z with
-        Zero -> Zero
-        | Positive k -> Negative k
+        Positive n when N.is_zero n -> Positive n 
+        | Positive n -> Negative n
         | Negative k -> Positive k
 let add a b =
     match a, b with
-        _, Zero -> a
-        | Zero, _ -> b
+        _, Positive n when N.is_zero n -> a
+        | Positive n, _ when N.is_zero n -> b
         | Positive k, Positive l -> Positive (K.add k l)
         | Negative k, Negative l -> Negative (K.add k l)
         | Positive p, Negative n
@@ -37,18 +34,18 @@ let add a b =
             else if p < n then
                 Negative (K.sub n p)
             else
-                Zero
+                zero
 let sub a b =
     add a @@ neg b
 let compare a b =
     match sub a b with
-        Zero -> 0
+        Positive n when N.is_zero n -> 0
         | Positive _ -> 1
         | Negative _ -> -1
 let mul a b =
     match a b with
-        _, Zero
-        | Zero, _ -> Zero
+        _, Positive n when N.is_zero n -> zero
+        | Positive n, _ when N.is_zero n -> zero
         | Positive n, Positive m
         | Negative n, Negative m -> Positive (K.mul n m)
         | Positive n, Negative m
@@ -59,8 +56,7 @@ let is_counting z =
         | _ -> false
 let is_natural z =
     match z with
-        Zero
-        | Positive _ -> true
+        Positive _ -> true
         | _ -> false
 let addi32 z i =
     if Int32.compare i 0l > 0 then
