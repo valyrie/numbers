@@ -65,9 +65,13 @@ let sub a b =
         let l = max (length a) (length b) in
         let (c, _, _) = fold_left2
             (fun (c, i, carry) a b ->
-                let cn = a - b - carry in
-                Bytes.set_uint8 c i @@ u8 cn;
-                c, i + 1, u8carry cn)
+                let cn, cb =
+                    (if a - b - carry >= 0 then
+                        a - b - carry, 0
+                    else
+                        (a + 256) - b - carry, 1) in
+                Bytes.set_uint8 c i @@ cn;
+                c, i + 1, cb)
             (make l 0, 0, 0) l a b in
         c
     else if compare a b = 0 then
