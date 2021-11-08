@@ -1,19 +1,19 @@
 (* unsigned integers: 0, 1, 2, 3, n *)
 
-(*                          UNSIGNED INTEGERS, AKA k                         *)
-(*    Unsigned integer literals (aka k) are stored as a sequence of bytes in *)
-(* little-endian form, which is to say the least significant byte is stored  *)
-(* first. unsigned integers are the non-negative integers, including 0. This *)
-(* somewhat simplifies operations on them, due to having a zero-element, vs  *)
-(* the naturals.                                                             *)
-(*    Operations on unsigned integers tend to be digit-by-digit, and require *)
-(* more iterations as the operands acquire more digits.                      *)
-(*                             WHAT IS A DIGIT?                              *)
-(*    Being stored as a little-endian sequence of bytes, it makes sense for  *)
-(* operations on unsigned integers to iterate these bytes. This makes the    *)
-(* smallest divisible component of an unsigned integer literal the byte or,  *)
-(* alternatively, the digit. The words digit, char, and byte can be used     *)
-(* interchangably when discussing these most primitive units of a number.    *)
+(*                          UNSIGNED INTEGERS, AKA k                          *)
+(*    Unsigned integer literals (aka k) are stored as a sequence of bytes in  *)
+(* little-endian form, which is to say the least significant byte is stored   *)
+(* first. unsigned integers are the non-negative integers, including 0. This  *)
+(* somewhat simplifies operations on them, due to having a zero-element, vs   *)
+(* the naturals.                                                              *)
+(*    Operations on unsigned integers tend to be digit-by-digit, and require  *)
+(* more iterations as the operands acquire more digits.                       *)
+(*                              WHAT IS A DIGIT?                              *)
+(*    Being stored as a little-endian sequence of bytes, it makes sense for   *)
+(* operations on unsigned integers to iterate these bytes. This makes the     *)
+(* smallest divisible component of an unsigned integer literal the byte or,   *)
+(* alternatively, the digit. The words digit, char, and byte can be used      *)
+(* interchangably when discussing these most primitive units of a number.     *)
 
 (* K.t -- unsigned integer; ex: 0, 1, 2, 3, n *)
 type t = bytes
@@ -78,7 +78,8 @@ let right_shift_digits n i =
     rstrip n i
 let compare a b =
     fold_left2
-        (fun c a b -> if Int.compare a b = 0 then c else Int.compare a b) 0 0 a b
+        (fun c a b -> if Int.compare a b = 0 then c else Int.compare a b)
+        0 0 a b
 let is_zero n =
     compare n zero = 0
 let add a b =
@@ -107,7 +108,9 @@ let sub a b =
     else if compare a b = 0 then
         zero
     else
-        raise @@ Invalid_argument (Printf.sprintf "Cannot subtract N %s from N %s" (to_string b) (to_string a))
+        raise @@ Invalid_argument (
+            Printf.sprintf "Cannot subtract N %s from N %s"
+                (to_string b) (to_string a))
 let mul a b =
     let l = (length a) + (length b) in
     let (c, _) = fold_left
@@ -139,12 +142,16 @@ let to_u32 n =
     if compare n (of_u32 Int32.max_int) <= 0 then
         Bytes.get_int32_le (pad 4 n) 0
     else
-        raise @@ Invalid_argument (Printf.sprintf "Cannot convert N %s to int32; N is too large" (to_string n))
+        raise @@ Invalid_argument (
+            Printf.sprintf "Cannot convert N %s to int32; N is too large"
+                (to_string n))
 let to_u64 n =
     if compare n (of_u64 Int64.max_int) <= 0 then
         Bytes.get_int64_le (pad 8 n) 0
     else
-        raise @@ Invalid_argument (Printf.sprintf "Cannot convert N %s to int64; N is too large" (to_string n))
+        raise @@ Invalid_argument (
+            Printf.sprintf "Cannot convert N %s to int64; N is too large"
+                (to_string n))
 let to_uint n =
     Int64.to_int @@ to_u64 n
 let logand a b =
