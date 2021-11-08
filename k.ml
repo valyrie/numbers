@@ -92,6 +92,19 @@ let sub a b =
         zero
     else
         raise @@ Invalid_argument (Printf.sprintf "Cannot subtract N %s from N %s" (to_string b) (to_string a))
+let mul a b =
+    let l = (length a) + (length b) in
+    let (c, _) = fold_left
+        (fun (c, i) b ->
+            let (c, _, _, _) = fold_left
+                (fun (c, j, carry, b) a ->
+                    add
+                        (left_shift_digits (make 1 (u8 @@ a * b + carry)) j)
+                        c, j + 1, u8carry @@ a * b + carry, b)
+                (c, i, 0, b) @@ pad l a in
+            c, i + 1)
+        (make l 0, 0) @@ pad l b in
+    c
 let addu32 n i =
     let b = make_zero 4 in
     let _ = Bytes.set_int32_le b 0 i in
