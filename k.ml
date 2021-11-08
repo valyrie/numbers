@@ -1,5 +1,21 @@
 (* unsigned integers: 0, 1, 2, 3, n *)
 
+(*                          UNSIGNED INTEGERS, AKA k                         *)
+(*    Unsigned integer literals (aka k) are stored as a sequence of bytes in *)
+(* little-endian form, which is to say the least significant byte is stored  *)
+(* first. unsigned integers are the non-negative integers, including 0. This *)
+(* somewhat simplifies operations on them, due to having a zero-element, vs  *)
+(* the naturals.                                                             *)
+(*    Operations on unsigned integers tend to be digit-by-digit, and require *)
+(* more iterations as the operands acquire more digits.                      *)
+(*                             WHAT IS A DIGIT?                              *)
+(*    Being stored as a little-endian sequence of bytes, it makes sense for  *)
+(* operations on unsigned integers to iterate these bytes. This makes the    *)
+(* smallest divisible component of an unsigned integer literal the byte or,  *)
+(* alternatively, the digit. The words digit, char, and byte can be used     *)
+(* interchangably when discussing these most primitive units of a number.    *)
+
+(* K.t -- unsigned integer; ex: 0, 1, 2, 3, n *)
 type t = bytes
 let make i k =
     Bytes.make i @@ Char.chr k
