@@ -17,6 +17,8 @@ let length n =
     Bytes.length n
 let ctz_digits n =
     fold_left (fun s i -> if i != 0 then 0 else s + 1) 0 n
+let clz_digits n =
+    fold_right (fun s i -> if i != 0 then 0 else s + 1) n 0
 let significant_digits n =
     max 1 @@ length n - ctz_digits n
 let trim n =
@@ -46,6 +48,15 @@ let fold_right2 f l a b i =
     List.fold_right2 f
         (to_list a)
         (to_list b) i
+let cat a b =
+    Bytes.cat a b
+let trunc a i =
+    Bytes.sub (pad i a) 0 i
+let compare a b =
+    fold_left2
+        (fun c a b -> if Int.compare a b = 0 then c else Int.compare a b) 0 0 a b
+let is_zero n =
+    compare n zero = 0
 let add a b =
     let l = 1 + max (length a) (length b) in
     let (c, _, _) = fold_left2
@@ -55,11 +66,6 @@ let add a b =
             c, i + 1, u8carry cn)
         (make l 0, 0, 0) l a b in
     c
-let compare a b =
-    fold_left2
-        (fun c a b -> if Int.compare a b = 0 then c else Int.compare a b) 0 0 a b
-let is_zero n =
-    compare n zero = 0
 let sub a b =
     if compare a b > 0 then
         let l = max (length a) (length b) in
@@ -78,19 +84,53 @@ let sub a b =
         zero
     else
         raise @@ Invalid_argument (Printf.sprintf "Cannot subtract N %s from N %s" (to_string b) (to_string a))
-let cat a b =
-    Bytes.cat a b
-let trunc a i =
-    Bytes.sub (pad i a) 0 i
 let addu32 n i =
     let b = make_zero 4 in
-    let _ = Bytes.set_int32_ne b 0 i in
+    let _ = Bytes.set_int32_le b 0 i in
     trim @@ add n b
 let addu64 n i =
     let b = make_zero 8 in
-    let _ = Bytes.set_int64_ne b 0 i in
+    let _ = Bytes.set_int64_le b 0 i in
     trim @@ add n b
 let of_u32 i =
     addu32 zero i
 let of_u64 i =
     addu64 zero i
+let of_uint i =
+    addu64 zero (Int64.of_int i)
+let to_u32 n =
+    if compare n (of_u32 Int32.max_int) >= 0 then
+        Bytes.get_int32_le n 0
+    else
+        raise @@ Invalid_argument (Printf.sprintf "Cannot convert N %s to int32; N is too large" (to_string n))
+let to_u64 n =
+    if compare n (of_u64 Int64.max_int) >= 0 then
+        Bytes.get_int64_le n 0
+    else
+        raise @@ Invalid_argument (Printf.sprintf "Cannot convert N %s to int64; N is too large" (to_string n))
+let to_uint n =
+    Int64.to_int @@ to_u64 n
+let logand a b =
+    let l = max (length a) (length b) in
+    let (c, _) = fold_left2
+        (fun (c, i) a b ->
+            Bytes.set_uint8 c i (Int.logand a b);
+            c, i + 1)
+        (make l 0, 0) l a b in
+    c
+let logor a b =
+    let l = max (length a) (length b) in
+    let (c, _) = fold_left2
+        (fun (c, i) a b ->
+            Bytes.set_uint8 c i (Int.logor a b);
+            c, i + 1)
+        (make l 0, 0) l a b in
+    c
+let logxor a b =
+    let l = max (length a) (length b) in
+    let (c, _) = fold_left2
+        (fun (c, i) a b ->
+            Bytes.set_uint8 c i (Int.logxor a b);
+            c, i + 1)
+        (make l 0, 0) l a b in
+    c
