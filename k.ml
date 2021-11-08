@@ -108,12 +108,12 @@ let of_uint i =
     addu64 zero (Int64.of_int i)
 let to_u32 n =
     if compare n (of_u32 Int32.max_int) <= 0 then
-        Bytes.get_int32_le n 0
+        Bytes.get_int32_le (pad 4 n) 0
     else
         raise @@ Invalid_argument (Printf.sprintf "Cannot convert N %s to int32; N is too large" (to_string n))
 let to_u64 n =
     if compare n (of_u64 Int64.max_int) <= 0 then
-        Bytes.get_int64_le n 0
+        Bytes.get_int64_le (pad 8 n) 0
     else
         raise @@ Invalid_argument (Printf.sprintf "Cannot convert N %s to int64; N is too large" (to_string n))
 let to_uint n =
