@@ -52,6 +52,14 @@ let cat a b =
     Bytes.cat a b
 let trunc a i =
     Bytes.sub (pad i a) 0 i
+let lstrip a i =
+    Bytes.sub (pad i a) 0 i
+let rstrip a i =
+    Bytes.sub (pad i a) i (Bytes.length (pad i a) - i)
+let left_shift_digits n i =
+    cat (make_zero i) n
+let right_shift_digits n i =
+    rstrip n i
 let compare a b =
     fold_left2
         (fun c a b -> if Int.compare a b = 0 then c else Int.compare a b) 0 0 a b
