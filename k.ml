@@ -1,40 +1,40 @@
-(* naturals: 0, 1, 2, 3, n *)
+(* unsigned integers: 0, 1, 2, 3, n *)
 
 type t = bytes
-let make i n =
-    Bytes.make i @@ Char.chr n
+let make i k =
+    Bytes.make i @@ Char.chr k
 let u8 i = Int.logand i 0xFF
 let u8carry i = Int.shift_right_logical i 8
-let to_list n =
-    List.map Char.code @@ List.of_seq @@ Bytes.to_seq n
-let fold_left f i n =
-    List.fold_left f i @@ to_list n
+let to_list k =
+    List.map Char.code @@ List.of_seq @@ Bytes.to_seq k
+let fold_left f i k =
+    List.fold_left f i @@ to_list k
 let fold_right f n i =
     List.fold_right f (to_list n) i
 let make_zero i = make i 0
 let zero = make_zero 1
-let length n =
-    Bytes.length n
-let ctz_digits n =
-    fold_left (fun s i -> if i != 0 then 0 else s + 1) 0 n
-let clz_digits n =
-    fold_right (fun s i -> if i != 0 then 0 else s + 1) n 0
-let significant_digits n =
-    max 1 @@ length n - ctz_digits n
-let trim n =
-    Bytes.sub n 0 @@ significant_digits n
-let to_string n =
-    let to_string_inner n =
-        fold_left (fun s i -> Printf.sprintf "%02x%s" i s) "" @@ trim n in
-    Printf.sprintf "0x%s" @@ to_string_inner n
-let get n i =
-    if i < length n then
-        Bytes.get n i
+let length k =
+    Bytes.length k
+let ctz_digits k =
+    fold_left (fun s i -> if i != 0 then 0 else s + 1) 0 k
+let clz_digits k =
+    fold_right (fun s i -> if i != 0 then 0 else s + 1) k 0
+let significant_digits k =
+    max 1 @@ length k - ctz_digits k
+let trim k =
+    Bytes.sub k 0 @@ significant_digits k
+let to_string k =
+    let to_string_inner k =
+        fold_left (fun s i -> Printf.sprintf "%02x%s" i s) "" @@ trim k in
+    Printf.sprintf "0x%s" @@ to_string_inner k
+let get k i =
+    if i < length k then
+        Bytes.get k i
     else
         Char.chr 0
-let pad l n =
-    let l = max l @@ length n in
-    Bytes.init l (get n)
+let pad l k =
+    let l = max l @@ length k in
+    Bytes.init l (get k)
 let pad2 l a b =
     let l = max l @@ max (length a) (length b) in
     pad l a, pad l b
