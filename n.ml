@@ -78,15 +78,6 @@ let sub a b =
         zero
     else
         raise @@ Invalid_argument (Printf.sprintf "Cannot subtract N %s from N %s" (to_string b) (to_string a))
-let mul a b =
-    let l = (length a) + (length b) in
-    let (c, _, _) = fold_left2
-        (fun (c, i, carry) a b ->
-            let cn = a * b + carry in
-            Bytes.set_uint8 c i @@ u8 cn;
-            c, i + 1, u8carry cn)
-        (make l 0, 0, 0) l a b in
-    c
 let cat a b =
     Bytes.cat a b
 let trunc a i =

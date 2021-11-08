@@ -15,8 +15,6 @@ let sub a b =
         N.sub a b
     else
         raise @@ Invalid_argument (Printf.sprintf "Cannot subtract K %s from K %s" (to_string b) (to_string a))
-let mul a b =
-    N.mul a b
 let addu32 k i =
     N.addu32 k i
 let addu64 k i =

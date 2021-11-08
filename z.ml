@@ -42,14 +42,6 @@ let compare a b =
         Positive n when N.is_zero n -> 0
         | Positive _ -> 1
         | Negative _ -> -1
-let mul a b =
-    match a b with
-        _, Positive n when N.is_zero n -> zero
-        | Positive n, _ when N.is_zero n -> zero
-        | Positive n, Positive m
-        | Negative n, Negative m -> Positive (K.mul n m)
-        | Positive n, Negative m
-        | Negative n, Positive m -> Negative (K.mul n m)
 let is_counting z =
     match z with
         Positive _ -> true
