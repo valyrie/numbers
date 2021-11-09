@@ -111,6 +111,30 @@ let sub a b =
         raise @@ Invalid_argument (
             Printf.sprintf "Cannot subtract N %s from N %s"
                 (to_string b) (to_string a))
+let succ k =
+    add k @@ make 1 1
+let pred k =
+    sub k @@ make 1 1
+let double k =
+    let l = length k + 1 in
+    let (x, _, _) = fold_left
+        (fun (x, i, carry) k ->
+            let c = Int.shift_right_logical (Int.logand k 0b1000_0000) 7 in
+            let n = carry + Int.shift_left k 1 in
+            Bytes.set_uint8 x i @@ u8 n;
+            x, i + 1, c)
+        (make l 0, 0, 0) @@ pad l k in
+    x
+let half k =
+    let l = length k in
+    let (x, _, _) = fold_right
+        (fun k (x, i, carry) ->
+            let c = Int.logand 1 k in
+            let n = (Int.shift_left carry 7) + Int.shift_right_logical k 1 in
+            Bytes.set_uint8 x i @@ u8 n;
+            x, i - 1, c)
+        (pad l k) (make l 0, (l - 1), 0) in
+    x
 let mul a b =
     let l = (length a) + (length b) in
     let (c, _) = fold_left
