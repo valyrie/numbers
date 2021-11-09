@@ -25,8 +25,8 @@ let to_list k =
     List.map Char.code @@ List.of_seq @@ Bytes.to_seq k
 let fold_left f i k =
     List.fold_left f i @@ to_list k
-let fold_right f n i =
-    List.fold_right f (to_list n) i
+let fold_right f k i =
+    List.fold_right f (to_list k) i
 let make_zero i = make i 0
 let zero = make_zero 1
 let length k =
