@@ -17,6 +17,7 @@
 
 (* K.t -- unsigned integer; ex: 0, 1, 2, 3, n *)
 type t = bytes
+exception Underflow
 let make i k =
     Bytes.make i @@ Char.chr k
 let u8 i = Int.logand i 0xFF
@@ -108,9 +109,7 @@ let sub a b =
     else if compare a b = 0 then
         zero
     else
-        raise @@ Invalid_argument (
-            Printf.sprintf "Cannot subtract N %s from N %s"
-                (to_string b) (to_string a))
+        raise @@ Underflow
 let succ k =
     add k @@ make 1 1
 let pred k =
@@ -148,6 +147,11 @@ let mul a b =
             c, i + 1)
         (make l 0, 0) @@ pad l b in
     c
+let divmod a b =
+    if not @@ is_zero b then
+        ()
+    else
+        raise Division_by_zero
 let addu32 n i =
     let b = make_zero 4 in
     let _ = Bytes.set_int32_le b 0 i in
