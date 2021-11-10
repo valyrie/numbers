@@ -27,15 +27,16 @@ let to_list k =
     List.map Char.code @@ List.of_seq @@ Bytes.to_seq k
 let to_list_bits k =
     List.concat @@ List.map
-        (fun i -> [
-            Int.shift_right_logical i 0 |> Int.logand 1;
-            Int.shift_right_logical i 1 |> Int.logand 1;
-            Int.shift_right_logical i 2 |> Int.logand 1;
-            Int.shift_right_logical i 3 |> Int.logand 1;
-            Int.shift_right_logical i 4 |> Int.logand 1;
-            Int.shift_right_logical i 5 |> Int.logand 1;
-            Int.shift_right_logical i 6 |> Int.logand 1;
-            Int.shift_right_logical i 7 |> Int.logand 1])
+        (fun i -> List.map (
+            fun i -> Int.logand 1 i = 1) [
+            Int.shift_right_logical i 0;
+            Int.shift_right_logical i 1;
+            Int.shift_right_logical i 2;
+            Int.shift_right_logical i 3;
+            Int.shift_right_logical i 4;
+            Int.shift_right_logical i 5;
+            Int.shift_right_logical i 6;
+            Int.shift_right_logical i 7])
         @@ List.map Char.code @@ List.of_seq @@ Bytes.to_seq k
 let fold_left f i k =
     List.fold_left f i @@ to_list k
