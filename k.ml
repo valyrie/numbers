@@ -134,7 +134,8 @@ let succ k =
 let pred k =
     sub k @@ make 1 1
 let double k =
-    let l = length k + (Bool.to_int (0x7F < (Bytes.get_uint8 k @@ length k - 1))) in
+    let l = length k + (Bool.to_int
+        (0x7F < (Bytes.get_uint8 k @@ length k - 1))) in
     let (x, _, _) = fold_left
         (fun (x, i, carry) k ->
             let c = Int.shift_right_logical (Int.logand k 0b1000_0000) 7 in
