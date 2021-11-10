@@ -53,8 +53,8 @@ let length k =
     Bytes.length k
 let ctz_digits k =
     fold_left (fun s i -> if i != 0 then 0 else s + 1) 0 k
-let clz_digits k =
-    fold_right (fun s i -> if i != 0 then 0 else s + 1) k 0
+(*let clz_digits k =
+    fold_right (fun s i -> if i != 0 then 0 else s + 1) k 0*)
 let significant_digits k =
     max 1 @@ length k - ctz_digits k
 let trim k =
@@ -88,8 +88,8 @@ let cat a b =
     Bytes.cat a b
 let trunc a i =
     Bytes.sub (pad i a) 0 i
-let lstrip a i =
-    Bytes.sub (pad i a) 0 i
+(*let lstrip a i =
+    Bytes.sub (pad i a) 0 i*)
 let rstrip a i =
     Bytes.sub (pad i a) i (Bytes.length (pad i a) - i)
 let left_shift_digits n i =
