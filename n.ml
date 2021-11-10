@@ -2,7 +2,6 @@
 
 type t = K.t
 exception Underflow = K.Underflow
-
 let one = K.one
 let trim n = K.trim n
 let to_string n = K.to_string n
