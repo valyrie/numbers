@@ -18,16 +18,33 @@
 (* K.t -- unsigned integer; ex: 0, 1, 2, 3, n *)
 type t = bytes
 exception Underflow
+exception Division_by_zero
 let make i k =
     Bytes.make i @@ Char.chr k
 let u8 i = Int.logand i 0xFF
 let u8carry i = Int.shift_right_logical i 8
 let to_list k =
     List.map Char.code @@ List.of_seq @@ Bytes.to_seq k
+let to_list_bits k =
+    List.concat @@ List.map
+        (fun i -> [
+            Int.shift_right_logical i 0 |> Int.logand 1;
+            Int.shift_right_logical i 1 |> Int.logand 1;
+            Int.shift_right_logical i 2 |> Int.logand 1;
+            Int.shift_right_logical i 3 |> Int.logand 1;
+            Int.shift_right_logical i 4 |> Int.logand 1;
+            Int.shift_right_logical i 5 |> Int.logand 1;
+            Int.shift_right_logical i 6 |> Int.logand 1;
+            Int.shift_right_logical i 7 |> Int.logand 1])
+        @@ List.map Char.code @@ List.of_seq @@ Bytes.to_seq k
 let fold_left f i k =
     List.fold_left f i @@ to_list k
 let fold_right f k i =
     List.fold_right f (to_list k) i
+let fold_left_bits f i k =
+    List.fold_left f i @@ to_list_bits k
+let fold_right_bits f k i =
+    List.fold_right f (to_list_bits k) i
 let make_zero i = make i 0
 let zero = make_zero 1
 let length k =
