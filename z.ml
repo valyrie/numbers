@@ -22,6 +22,12 @@ let compare a b =
         | Negative _, Positive _ -> -1
         | Positive x, Positive y -> K.compare x y
         | Negative x, Negative y -> N.compare y x
+let is_zero z =
+    compare z zero = 0
+let is_negative z =
+    compare z zero < 0
+let is_positive z =
+    compare z zero > 0
 let neg z =
     match z with
         Positive k when K.is_zero k -> z
