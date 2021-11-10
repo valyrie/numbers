@@ -103,3 +103,29 @@ let div a b =
 let rem a b =
     let (_, r) = divrem a b in
     r
+let of_i32 i =
+    if Int32.compare i 0l >= 0 then
+        Positive (K.of_u32 i)
+    else
+        Negative (N.of_u32 @@ Int32.neg i)
+let of_i64 i =
+    if Int64.compare i 0L >= 0 then
+        Positive (K.of_u64 i)
+    else
+        Negative (N.of_u64 @@ Int64.neg i)
+let of_int i =
+    of_i64 @@ Int64.of_int i
+let of_n n =
+    Positive (N.to_k n)
+let of_k k =
+    Positive k
+let to_i32 z =
+    ()
+let to_i64 z =
+    ()
+let to_int z =
+    ()
+let to_n z =
+    ()
+let to_k z =
+    ()
