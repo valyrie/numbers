@@ -52,3 +52,13 @@ let half z =
         Positive k -> Positive (K.half k)
         | Negative n when N.is_one n -> Positive K.zero
         | Negative n -> Negative (N.of_k @@ K.half @@ N.to_k n)
+let mul a b =
+    match (a, b) with
+        Positive x, Positive y -> Positive (K.mul x y)
+        | Negative x, Negative y -> Positive (K.mul (N.to_k x) (N.to_k y))
+        | Positive p, Negative n
+        | Negative n, Positive p ->
+            if K.compare p K.zero = 0 then
+                Positive K.zero
+            else
+                Negative (N.of_k @@ K.mul p @@ N.to_k n)
