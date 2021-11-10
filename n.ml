@@ -10,7 +10,7 @@ let to_string n =
 let compare a b =
     K.compare a b
 let is_one n =
-    compare n one
+    compare n one >= 0
 let add a b =
     K.add a b
 let sub a b =
