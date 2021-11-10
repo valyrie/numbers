@@ -246,6 +246,18 @@ let logxor a b =
         (make l 0, 0) l a b in
     c
 let left_shift a b =
-    ()
+    let (d, b) = divrem b (of_uint 8) in
+    let rec rec_shift a n =
+        if n > 0 then
+            rec_shift (double a) (n - 1)
+        else
+            a in
+    rec_shift (left_shift_digits a @@ to_uint d) @@ to_uint b
 let right_shift a b =
-    ()
+    let (d, b) = divrem b (of_uint 8) in
+    let rec rec_shift a n =
+        if n > 0 then
+            rec_shift (half a) (n - 1)
+        else
+            a in
+    rec_shift (right_shift_digits a @@ to_uint d) @@ to_uint b
