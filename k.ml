@@ -170,14 +170,18 @@ let divrem a b =
         let l = max (length a) (length b) in
         let (q, r) = fold_right_bits
         (fun a (q, r) ->
-            let r = add (make 1 @@ Bool.to_int a) @@ double r in
+            let r =
+                if a then
+                    succ @@ double r
+                else
+                    double r in
             let q = double q in
             if compare r b < 0 then
                 q, r
             else
                 succ q, sub r b)
         a (make l 0, make l 0) in
-        trim q, trim r
+        q, r
     else
         raise Division_by_zero
 let div a b =
