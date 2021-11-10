@@ -120,12 +120,40 @@ let of_n n =
 let of_k k =
     Positive k
 let to_i32 z =
-    ()
+    if compare z (of_i32 Int32.max_int) <= 0 then
+        if compare z (of_i32 Int32.min_int) >= 0 then
+            match z with
+                Positive k -> K.to_u32 k
+                | Negative n -> Int32.neg @@ N.to_u32 n
+        else
+            raise @@ Invalid_argument (
+                Printf.sprintf "Cannot convert Z %s to int32; Z is too small"
+                (to_string z))
+    else
+        raise @@ Invalid_argument (
+            Printf.sprintf "Cannot convert Z %s to int32; Z is too large"
+                (to_string z))
 let to_i64 z =
-    ()
+    if compare z (of_i64 Int64.max_int) <= 0 then
+        if compare z (of_i64 Int64.min_int) >= 0 then
+            match z with
+                Positive k -> K.to_u64 k
+                | Negative n -> Int64.neg @@ N.to_u64 n
+        else
+            raise @@ Invalid_argument (
+                Printf.sprintf "Cannot convert Z %s to int64; Z is too small"
+                (to_string z))
+    else
+        raise @@ Invalid_argument (
+            Printf.sprintf "Cannot convert Z %s to int64; Z is too large"
+                (to_string z))
 let to_int z =
-    ()
+    Int64.to_int @@ to_i64 z
 let to_n z =
-    ()
+    match z with
+        Positive k -> N.of_k k
+        | _ -> raise Underflow
 let to_k z =
-    ()
+    match z with
+        Positive k -> k
+        | _ -> raise Underflow
