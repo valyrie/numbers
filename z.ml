@@ -58,7 +58,42 @@ let mul a b =
         | Negative x, Negative y -> Positive (K.mul (N.to_k x) (N.to_k y))
         | Positive p, Negative n
         | Negative n, Positive p ->
-            if K.compare p K.zero = 0 then
-                Positive K.zero
-            else
+            if K.compare p K.zero > 0 then
                 Negative (N.of_k @@ K.mul p @@ N.to_k n)
+            else
+                Positive K.zero
+let divrem a b =
+    match (a, b) with
+        Positive x, Positive y ->
+            let (q, r) = K.divrem x y in
+            Positive q, Positive r
+        | Negative x, Negative y ->
+            let (q, r) = K.divrem (N.to_k x) (N.to_k y) in
+            Positive q, 
+                if K.compare r K.zero > 0 then
+                    Negative (N.of_k r)
+                else
+                    Positive r
+        | Positive x, Negative y ->
+            let (q, r) = K.divrem x (N.to_k y) in
+            (if K.compare q K.zero > 0 then
+                Negative (N.of_k q)
+            else
+                Positive q),
+                Positive r
+        | Negative x, Positive y ->
+            let (q, r) = K.divrem (N.to_k x) y in
+            (if K.compare q K.zero > 0 then
+                Negative (N.of_k q)
+            else
+                Positive q),
+                if K.compare r K.zero > 0 then
+                    Negative (N.of_k r)
+                else
+                    Positive r
+let div a b =
+    let (q, _) = divrem a b in
+    q
+let rem a b =
+    let (_, r) = divrem a b in
+    r
