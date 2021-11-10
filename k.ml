@@ -48,6 +48,7 @@ let fold_right_bits f k i =
     List.fold_right f (to_list_bits k) i
 let make_zero i = make i 0
 let zero = make_zero 1
+let one = make 1 1
 let length k =
     Bytes.length k
 let ctz_digits k =
@@ -244,3 +245,7 @@ let logxor a b =
             c, i + 1)
         (make l 0, 0) l a b in
     c
+let left_shift a b =
+    ()
+let right_shift a b =
+    ()
