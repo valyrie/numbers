@@ -2,11 +2,17 @@
 
 type t = K.t
 exception Underflow = K.Underflow
-let one = K.one
-let trim n = K.trim n
-let to_string n = K.to_string n
-let compare a b = K.compare a b
-let add a b = K.add a b
+let one =K.one
+let trim n =
+    K.trim n
+let to_string n =
+    K.to_string n
+let compare a b =
+    K.compare a b
+let is_one n =
+    compare n one
+let add a b =
+    K.add a b
 let sub a b =
     if compare a b > 0 then
         K.sub a b

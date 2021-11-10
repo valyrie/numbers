@@ -4,6 +4,7 @@ val one : t
 val trim : t -> t
 val to_string : t -> string
 val compare : t -> t -> int
+val is_one : t -> bool
 val add : t -> t -> t
 val sub : t -> t -> t
 val succ : t -> t
