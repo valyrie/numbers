@@ -35,6 +35,8 @@ let of_uint i =
         K.of_uint i
     else
         raise Underflow
+let of_k (k: K.t): t =
+    k
 let to_u32 n =
     K.to_u32 n
 let to_u64 n =
