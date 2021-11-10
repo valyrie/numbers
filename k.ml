@@ -133,7 +133,7 @@ let succ k =
 let pred k =
     sub k @@ make 1 1
 let double k =
-    let l = length k + 1 in
+    let l = length k + (Bool.to_int (0x7F < (Bytes.get_uint8 k @@ length k - 1))) in
     let (x, _, _) = fold_left
         (fun (x, i, carry) k ->
             let c = Int.shift_right_logical (Int.logand k 0b1000_0000) 7 in
@@ -165,11 +165,27 @@ let mul a b =
             c, i + 1)
         (make l 0, 0) @@ pad l b in
     c
-let divmod a b =
+let divrem a b =
     if not @@ is_zero b then
-        ()
+        let l = max (length a) (length b) in
+        let (q, r) = fold_right_bits
+        (fun a (q, r) ->
+            let r = add (make 1 @@ Bool.to_int a) @@ double r in
+            let q = double q in
+            if compare r b < 0 then
+                q, r
+            else
+                succ q, sub r b)
+        a (make l 0, make l 0) in
+        trim q, trim r
     else
         raise Division_by_zero
+let div a b =
+    let (q, _) = divrem a b in
+    q
+let rem a b =
+    let (_, r) = divrem a b in
+    r
 let addu32 n i =
     let b = make_zero 4 in
     let _ = Bytes.set_int32_le b 0 i in
