@@ -14,7 +14,7 @@ let trim z =
         | Negative n -> Negative (N.trim n)
 let to_string z =
     match z with
-        Positive k -> Printf.sprintf " %s" @@ K.to_string k
+        Positive k -> Printf.sprintf "+%s" @@ K.to_string k
         | Negative n -> Printf.sprintf "-%s" @@ N.to_string n
 let compare a b =
     match (a, b) with
