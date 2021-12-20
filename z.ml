@@ -33,6 +33,18 @@ let neg z =
         Positive k when K.is_zero k -> z
         | Positive k -> Negative (N.of_k k)
         | Negative n -> Positive (N.to_k n)
+let abs z =
+    if is_positive z then
+        z
+    else
+        neg z
+let normalize z =
+    if compare z one > 0 then
+        one
+    else if compare z minus_one < 0 then
+        minus_one
+    else
+        zero
 let add a b =
     match (a, b) with
         Positive x, Positive y -> Positive (K.add x y)

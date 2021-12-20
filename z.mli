@@ -11,6 +11,8 @@ val is_zero : t -> bool
 val is_negative : t -> bool
 val is_positive : t -> bool
 val neg : t -> t
+val abs : t -> t
+val normalize : t -> t
 val add : t -> t -> t
 val sub : t -> t -> t
 val succ : t -> t
