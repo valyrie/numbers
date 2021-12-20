@@ -9,6 +9,7 @@ val add : t -> t -> t
 val sub : t -> t -> t
 val succ : t -> t
 val pred : t -> t
+val mul : t -> t -> t
 val of_u32 : int32 -> t
 val of_u64 : int64 -> t
 val of_uint : int -> t

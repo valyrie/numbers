@@ -41,7 +41,10 @@ let of_uint i =
     else
         raise Underflow
 let of_k (k: K.t): t =
-    k
+    if K.compare k K.zero != 0 then
+        k
+    else
+        raise Underflow
 let to_u32 n =
     K.to_u32 n
 let to_u64 n =
@@ -50,3 +53,5 @@ let to_uint n =
     K.to_uint n
 let to_k n: K.t =
     n
+let mul a b =
+    of_k @@ K.mul (to_k a) (to_k b)
